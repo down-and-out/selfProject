@@ -6,6 +6,10 @@ public class StatusNum {
     public static final int LOGIN_SUCCESS = 200000;
     // 登录失败：账号或密码错误
     public static final int LOGIN_FAILURE = 300000;
+    // 退出成功
+    public static final int LOGOUT_SUCCESS = 200100;
+    // 退出失败
+    public static final int LOGOUT_FAILURE = 300100;
 
     // 用户查询状态码
     // 用户名不存在
