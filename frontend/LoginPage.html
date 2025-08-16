@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 登录系统</title>
+    <!-- 外部资源引入 -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.5.1/dist/vue-router.js"></script>
+</head>
+<body>
+    <!-- HTML结构 -->
+    <div id="app">
+        <router-view></router-view>
+    </div>
+
+    <!-- JavaScript逻辑 -->
+    <script>
+        // 登录页面组件
+        const LoginPage = {
+            template: `
+            <div class="container">
+              <div class="decoration">
+                <h1>欢迎回来</h1>
+                <p>高效、安全、易用的系统登录体验</p>
+              </div>
+
+              <div class="content">
+                <div class="logo">
+                  <div class="logo-icon">V</div>
+                  <div class="logo-text">系统登录</div>
+                </div>
+
+                <h2>账号登录</h2>
+                <p class="subtitle">请输入您的账号和密码</p>
+
+                <form @submit.prevent="login">
+                  <div class="form-group">
+                    <label for="userName">用户名</label>
+                    <input
+                      type="text"
+                      id="userName"
+                      v-model="userName"
+                      placeholder="请输入用户名"
+                      :class="{'error-input': errors.userName}"
+                    >
+                    <div class="error">{{ errors.userName }}</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password">密码</label>
+                    <input
+                      type="password"
+                      id="password"
+                      v-model="password"
+                      placeholder="请输入密码"
+                      :class="{'error-input': errors.password}"
+                    >
+                    <div class="error">{{ errors.password }}</div>
+                  </div>
+
+                  <button type="submit" class="btn">登录</button>
+                </form>
+
+                <div class="footer">
+                  <p>还没有账号? <a href="#">立即注册</a></p>
+                  <p><a href="#">忘记密码?</a></p>
+                </div>
+              </div>
+            </div>
+          `,
+            data() {
+                return {
+                    userName: '',
+                    password: '',
+                    errors: {
+                        userName: '',
+                        password: ''
+                    }
+                }
+            },
+            methods: {
+                validateForm() {
+                    let isValid = true;
+                    this.errors = { userName: '', password: '' };
+
+                    if (!this.userName) {
+                        this.errors.userName = '用户名不能为空';
+                        isValid = false;
+                    } else if (this.userName.length < 3) {
+                        this.errors.userName = '用户名长度至少3个字符';
+                        isValid = false;
+                    }
+
+                    if (!this.password) {
+                        this.errors.password = '密码不能为空';
+                        isValid = false;
+                    } else if (this.password.length < 6) {
+                        this.errors.password = '密码长度至少6个字符';
+                        isValid = false;
+                    }
+
+                    return isValid;
+                },
+                login() {
+                    if (this.validateForm()) {
+                        // 准备发送到后端的登录数据
+                        const loginData = {
+                            userName: this.userName,
+                            password: this.password
+                        };
+
+                        // 发送登录请求到后端接口
+                        // 发送登录请求到后端接口
+                        fetch('http://localhost:8080/AqTest/auth/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(loginData)
+                        })
+                        .then(response => {
+                            // 无论HTTP状态码如何，都尝试解析JSON响应
+                            return response.json().then(data => ({
+                                status: response.status,
+                                ok: response.ok,
+                                body: data
+                            }));
+                        })
+                        .then(result => {
+                            const data = result.body;
+                            // 根据返回的status字段处理结果，而不是HTTP状态码
+                            if (data.status === 200000) {
+                                // 登录成功，跳转到index首页
+                                window.location.href = 'index.html';
+                            } else {
+                                // 登录失败，显示错误信息
+                                alert(data.message || '登录失败，请重试');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('登录请求失败:', error);
+                            alert('登录请求失败，请检查网络连接或稍后再试');
+                        });
+                    }
+                }
+            }
+        };
+
+        // 定义路由
+        const routes = [
+            { path: '/', component: LoginPage }
+        ];
+
+        // 创建路由实例
+        const router = new VueRouter({
+            routes
+        });
+
+        // 创建 Vue 实例
+        new Vue({
+            el: '#app',
+            router
+        });
+    </script>
+</body>
+</html>

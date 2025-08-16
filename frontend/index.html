@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 登录系统</title>
+    <!-- 外部资源引入 -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.5.1/dist/vue-router.js"></script>
+    <!-- 引入公共样式 -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HTML结构 -->
+    <!-- 在body标签中添加 -->
+    <div id="app">
+        <router-view></router-view>
+    </div>
+    
+    <!-- 添加错误和加载提示 -->
+    <div id="app-loading" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <p>系统加载中...</p>
+    </div>
+    
+    <div id="app-error" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px;">
+        <p id="error-message">系统发生错误，请刷新页面重试</p>
+        <button onclick="location.reload()">刷新页面</button>
+    </div>
+    
+    <script>
+        // 全局错误处理
+        window.addEventListener('error', function(e) {
+            console.error('全局错误:', e);
+            document.getElementById('app-error').style.display = 'block';
+            document.getElementById('error-message').textContent = e.message || '系统发生错误，请刷新页面重试';
+        });
+    </script>
+    
+    <!-- 引入页面组件和路由配置 -->
+    <script src="pages/login.js"></script>
+    <script src="pages/dashboard.js"></script>
+    <script src="router.js"></script>
+</body>
+</html>
