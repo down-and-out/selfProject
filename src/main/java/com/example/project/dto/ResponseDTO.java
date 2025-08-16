@@ -3,15 +3,6 @@ package com.example.project.dto;
 import java.io.Serializable;
 
 public class ResponseDTO<T> implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
-    // 状态码常量定义
-    public static final int SUCCESS = 200000;
-    public static final int USER_NOT_EXIST = 401001;
-    public static final int LOGIN_FAILURE = 401002;
-    public static final int PARAM_ERROR = 400001;
-    public static final int SERVER_ERROR = 500001;
-    
     private int status;
     private String message;
     private T data;
