@@ -4,32 +4,28 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
+    <groupId>com.example</groupId>
     <artifactId>Project</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- 继承Spring Boot父项目，提供默认配置和依赖管理 -->
-    <!-- 修改父项目版本 -->
+    <!-- 确保所有依赖版本正确 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>3.1.5</version>
     </parent>
 
-    <!-- 添加Java版本配置 -->
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <java.version>1.8</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>17</java.version>
+        <!-- 定义依赖版本，便于统一管理 -->
+        <redisson.version>3.23.3</redisson.version> <!-- 更新到支持 Spring Boot 3.x 的版本 -->
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <jjwt.version>0.11.5</jjwt.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -40,53 +36,65 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!-- 使用MyBatis-Plus Starter -->
+        <!-- 使用与Spring Boot 3.x兼容的Redisson版本 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
+        </dependency>
+
+        <!-- 更新MyBatis-Plus到支持Spring Boot 3.x的版本 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.5</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version> <!-- 指定版本号 -->
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- 移除druid依赖，使用Spring Boot默认的HikariCP -->
-        <!-- 移除单独的spring-web依赖 -->
-
-        <!-- 日志依赖简化 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
-
-        <!-- 保留以下依赖即可获取完整的日志功能 -->
+        <!-- Lombok依赖 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!--jwt 依赖-->
+        <!-- 更新JWT依赖到更新的版本 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
-        
-        <!-- 添加SpringDoc OpenAPI依赖，用于导入 swagger -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- SpringDoc OpenAPI依赖 -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.15</version> <!-- 与Spring Boot 2.7.x兼容的稳定版本 -->
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.0.2</version> <!-- 支持Spring Boot 3.x -->
         </dependency>
+
+        <!-- Fastjson依赖 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.83</version> <!-- 稳定版本 -->
+            <version>2.0.21</version> <!-- 支持JDK 17 -->
+        </dependency>
+
+        <!-- MySQL数据库驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
         </dependency>
     </dependencies>
 
@@ -95,7 +103,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.2.5</version>
+                <version>3.1.5</version> <!-- 与Spring Boot父项目版本一致 -->
                 <configuration>
                     <mainClass>com.example.project.Application</mainClass>
                 </configuration>

@@ -12,9 +12,10 @@ import java.util.Optional;
 
 @Slf4j // 添加日志支持
 public class JWTUtils {
-    // 建议将密钥移至配置文件中，此处仅为示例
-    private static final String SECRET_KEY = "114514JsonWebToken"; // 重命名为更有意义的变量名
-    private static final long TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; // 1天有效期，提取为常量便于维护
+    // 重命名为更有意义的变量名
+    private static final String SECRET_KEY = "114514JsonWebToken";
+    // 1天有效期，提取为常量便于维护
+    private static final long TOKEN_EXPIRATION = 24 * 60 * 60 * 1000;
 
     /**
      * 创建JWT Token
@@ -50,7 +51,6 @@ public class JWTUtils {
                     .setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token) // 使用更具体的方法获取Claims对象
                     .getBody();
-            
             // 安全地转换为Map
             return claims;
         } catch (Exception e) {

@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * 与数据库交互，提供数据访问接口
  */
@@ -20,6 +22,10 @@ public interface UserRepository extends BaseMapper<User> {
     boolean UserRegister(String userName,String password);
 
     // 查询用户是否已存在
-    @Select("SELECT COUNT(*) > 0 FROM try WHERE userName = #{userName}")
-    boolean UserExist(String userName);
+    @Select("SELECT * FROM try WHERE userName = #{userName}")
+    User FindByUserName(String userName);
+
+    // 查询当前所有的用户名称
+    @Select("SELECT userName FROM try")
+    List<String> FindAllUserNames();
 }
